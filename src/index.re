@@ -2,6 +2,6 @@
 
 [@bs.module "./registerServiceWorker"] external register_service_worker : unit => unit = "default";
 
-ReactDOMRe.renderToElementWithId(<App message="DreamCodez FTW" />, "root");
+ReactDOMRe.renderToElementWithId(<App/>, "root");
 
 register_service_worker();

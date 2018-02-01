@@ -1,19 +1,27 @@
 [%bs.raw {|require('./app.css')|}];
-
-/*
-[@bs.module] external logo : string = "./logo.svg";
-*/
 [@bs.module] external logo : string = "./cucumber.png";
 
-let component = ReasonReact.statelessComponent("App");
+type action =
+  | BumpCount
+  | ToggleDialog(bool)
+;
 
-let make = (~message, _children) => {
+type state = { name: string, kudos: bool };
+
+let component = ReasonReact.reducerComponent("App");
+let make = () => {
   ...component,
-  render: (_self) =>
+  initialState: () => { name: "bob", kudos: true },
+  reducer: (action, state) =>
+    switch (action) {
+    | BumpCount => ReasonReact.Update({ ...state, name: "jim" })
+    | ToggleDialog(_show) => ReasonReact.Update({ ...state, name: "jim" })
+    },
+  render: ({ state }) =>
     <div className="App">
       <div className="App-header">
         <img src=logo className="App-logo" alt="logo" />
-        <h2> (ReasonReact.stringToElement(message)) </h2>
+        <h2> (ReasonReact.stringToElement(state.name)) </h2>
       </div>
       <p className="App-intro">
         (ReasonReact.stringToElement("To get started, edit"))
