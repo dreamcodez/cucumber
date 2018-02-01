@@ -9,7 +9,7 @@ type action =
 type state = { name: string, kudos: bool };
 
 let component = ReasonReact.reducerComponent("App");
-let make = () => {
+let make = (_children) => {
   ...component,
   initialState: () => { name: "bob", kudos: true },
   reducer: (action, state) =>
