@@ -14,20 +14,20 @@ let component = ReasonReact.reducerComponent("App");
 let make = (_children) => {
   ...component,
   initialState: () => { todos: [] },
-  reducer: (action, state) => {
+  reducer: (action, state) =>
     switch action {
     | AddTodo(todo) => ReasonReact.Update({ todos: [ ...state.todos, todo ] })
-    }
-  },
-  render: self =>
+    },
+  render: self => {
     <div className="App">
       <div className="App-header">
         <img src=logo className="App-logo" alt="logo" />
       </div>
       <p className="App-intro">
-        List.map(todo => {
-          <span>ReasonReact.stringToElement(todo)<span/>
-        }, self.state.todos)
+        (ReasonReact.arrayToElement(Array.of_list(List.map(todo => {
+          ReasonReact.stringToElement(todo)
+        }, self.state.todos))))
       </p>
     </div>
+  }
 };
