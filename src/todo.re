@@ -3,21 +3,18 @@ type action =
 ;
 
 type state = {
-  todos: list(string)
-};
-
-type internalState = {
+  todos: list(string),
   inputRef: ref(option(Dom.element))
 };
 
 let name = "Todo";
 
-let component = ReasonReact.reducerComponent(name);
+let component = ReasonReact.statelessComponent(name);
 
-let initialState = { todos: [] };
+let initialState = { inputRef: ref(None), todos: [] };
 
-let addTodo = (internalState: internalState, send, _evt) => {
-  let todo = Util.getElementObj(internalState.inputRef);
+let addTodo = (state: state, send, _evt) => {
+  let todo = Util.getElementObj(state.inputRef);
   let value = todo##value;
 
   if (value != "") {
@@ -34,23 +31,18 @@ let setInputRef = (el: Js.nullable(Dom.element), {ReasonReact.state}) => {
 let reducer = (action: action, state: state): state =>
   switch action {
     | AddTodo(todo) => {
+        ...state,
         todos: [ todo, ...state.todos ]
       }
   }
 ;
 
-type noAction =
-  | NoAction
-  | Foo
-;
-let make = (~send, ~state: state, _children) => {
+let make = (~send, ~state: state, ~handle, _children) => {
   ...component,
-  initialState: (): internalState => { inputRef: ref(None) },
-  reducer: (_action: noAction, _state: internalState) => ReasonReact.NoUpdate,
   render: self => {
     <div className="App">
-      <input _type="text" ref=(self.handle(setInputRef)) />
-      <button onClick=(addTodo(self.state, send))>
+      <input _type="text" ref=(handle(setInputRef)) />
+      <button onClick=(addTodo(state, send))>
           (ReasonReact.stringToElement("another one"))
       </button>
       <div className="App-intro">

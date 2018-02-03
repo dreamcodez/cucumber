@@ -32,7 +32,11 @@ let make = (_children) => {
       <div className="App-header">
         <img src=logo className="App-logo" alt="logo" />
       </div>
-      <Todo send=((todoAction: Todo.action) => self.send(TodoAction(todoAction))) state=self.state.todo />
+      <Todo
+        send=((todoAction: Todo.action) => self.send(TodoAction(todoAction)))
+        handle=(r => { todo: self.handle(r)})
+        state=self.state.todo
+        />
     </div>
   }
 };
