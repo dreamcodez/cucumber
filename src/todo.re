@@ -1,20 +1,17 @@
-type action =
+type publishedAction =
  | SetInput(string)
  | AddTodo(string)
 ;
 
-type state = {
+type publishedState = {
   todos: list(string),
   inputValue: string
 };
 
-let name = "Todo";
+let publishedInitialState = { inputValue: "", todos: [] };
 
-let component = ReasonReact.statelessComponent(name);
 
-let initialState = { inputValue: "", todos: [] };
-
-let reducer = (action: action, state: state): state =>
+let publishedReducer = (action: publishedAction, state: publishedState): publishedState =>
   switch action {
     | SetInput(inputValue) => {
       ...state,
@@ -27,7 +24,11 @@ let reducer = (action: action, state: state): state =>
   }
 ;
 
-let make = (~send, ~state: state, _children) => {
+let name = "Todo";
+
+let component = ReasonReact.statelessComponent(name);
+
+let make = (~send, ~state: publishedState, _children) => {
   ...component,
   render: _self => {
     <div className="App">
@@ -49,4 +50,3 @@ let make = (~send, ~state: state, _children) => {
     </div>
   }
 };
-

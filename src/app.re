@@ -1,9 +1,9 @@
 type action =
-  | TodoAction(Todo.action)
+  | TodoAction(Todo.publishedAction)
 ;
 type state = {
   foo: int,
-  todo: Todo.state
+  todo: Todo.publishedState
 };
 
 [%bs.raw {|require('./app.css')|}];
@@ -17,12 +17,12 @@ let make = (_children) => {
   ...component,
   initialState: _self => {
     foo: 1,
-    todo: Todo.initialState
+    todo: Todo.publishedInitialState
   },
   reducer: (action: action, state: state) => {
     let newState = switch action {
       | TodoAction(todoAction) => {
-        { ...state, todo: Todo.reducer(todoAction, state.todo) }
+        { ...state, todo: Todo.publishedReducer(todoAction, state.todo) }
       }
     };
     ReasonReact.Update(newState)
@@ -33,7 +33,7 @@ let make = (_children) => {
         <img src=logo className="App-logo" alt="logo" />
       </div>
       <Todo
-        send=((todoAction: Todo.action) => self.send(TodoAction(todoAction)))
+        send=((todoAction: Todo.publishedAction) => self.send(TodoAction(todoAction)))
         state=self.state.todo
         />
     </div>
