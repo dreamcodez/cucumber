@@ -6,22 +6,12 @@ type state = {
   todo: Todo.state
 };
 
-let name = "App";
-
 [%bs.raw {|require('./app.css')|}];
 [@bs.module] external logo : string = "./cucumber.png";
 
+let name = "App";
+
 let component = ReasonReact.reducerComponent(name);
-
-
-let reducer = (action: action, state: state) =>
-  switch action {
-    | TodoAction(todoAction) => ReasonReact.Update({
-      ...state,
-      todo: Todo.reducer(todoAction, state.todo)
-    })
-  }
-;
 
 let make = (_children) => {
   ...component,
@@ -29,7 +19,13 @@ let make = (_children) => {
     foo: 1,
     todo: Todo.initialState
   },
-  reducer,
+  reducer: (action: action, state: state) =>
+    switch action {
+      | TodoAction(todoAction) => ReasonReact.Update({
+        ...state,
+        todo: Todo.reducer(todoAction, state.todo)
+      })
+  },
   render: self => {
     <div className="App">
       <div className="App-header">
@@ -39,4 +35,3 @@ let make = (_children) => {
     </div>
   }
 };
-

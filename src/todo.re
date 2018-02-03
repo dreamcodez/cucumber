@@ -11,7 +11,7 @@ type state = {
 
 let name = "Todo";
 
-let component = ReasonReact.reducerComponent(name);
+let component = ReasonReact.statelessComponent(name);
 
 let initialState = { todos: [], inputRef: ref(None) };
 
