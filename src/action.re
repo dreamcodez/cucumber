@@ -1,0 +1,4 @@
+
+type t =
+ | AddTodo(string)
+;
