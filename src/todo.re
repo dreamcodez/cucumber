@@ -24,8 +24,8 @@ let addTodo = (state: state, send, _evt) => {
   ignore(todo##focus());
 };
 
-let setInputRef = (el: Js.nullable(Dom.element), {ReasonReact.state}) => {
-  state.inputRef := Js.Nullable.to_opt(el);
+let setInputRef = (el: Js.nullable(Dom.element), state) => {
+  { ...state, inputRef: ref(Js.Nullable.to_opt(el)) }
 };
 
 let reducer = (action: action, state: state): state =>
