@@ -16,7 +16,7 @@ let make = (_children) => {
   initialState: () => { todos: [] },
   reducer: (action, state) =>
     switch (action) {
-    | AddTodo(todo) => ReasonReact.Update({ ...state, todos: [ ...todos, todo ] })
+    | AddTodo todo => ReasonReact.Update({ todos: [ ...todos, todo ] })
     },
   render: self =>
     <div className="App">
