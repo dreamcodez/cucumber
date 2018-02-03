@@ -26,13 +26,16 @@ let name = "App";
 
 let component = ReasonReact.reducerComponent(name);
 
+let reducer = (action: Action.t, state: state) =>
+  switch action {
+    | AddTodo(todo) => ReasonReact.Update({ ...state, todos: [ todo, ...state.todos ] })
+  }
+;
+
 let make = (_children) => {
   ...component,
   initialState: () => { todos: [], inputRef: ref(None) },
-  reducer: (action, state) =>
-    switch action {
-      | AddTodo(todo) => ReasonReact.Update({ ...state, todos: [ todo, ...state.todos ] })
-    },
+  reducer,
   render: self => {
     <div className="App">
       <div className="App-header">
