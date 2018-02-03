@@ -1,34 +1,19 @@
-[%bs.raw {|require('./app.css')|}];
-[@bs.module] external logo : string = "./cucumber.png";
-
+type action =
+  | TodoAction(Todo.action)
+;
 type state = {
-  todos: list(string),
-  inputRef: Type.domRef
-};
-
-type self = ReasonReact.self (state,  ReasonReact.noRetainedProps,  Action.t);
-
-let addTodo = (self: self, _evt) => {
-  let todo = Util.getElementObj(self.state.inputRef);
-  let value = todo##value;
-  if (value != "") {
-    todo##value #= "";
-    self.send(AddTodo(value));
-  };
-  ignore(todo##focus());
-};
-
-let setInputRef = (el: Js.nullable(Dom.element), {ReasonReact.state}) => {
-  state.inputRef := Js.Nullable.to_opt(el);
+  todo: Todo.state
 };
 
 let name = "App";
 
-let component = ReasonReact.reducerComponent(name);
+[%bs.raw {|require('./app.css')|}];
+[@bs.module] external logo : string = "./cucumber.png";
 
-let reducer = (action: Action.t, state: state) =>
+let component = ReasonReact.reducerComponent(name);
+let reducer = (action: action, state: state) =>
   switch action {
-    | AddTodo(todo) => ReasonReact.Update({ ...state, todos: [ todo, ...state.todos ] })
+    | TodoAction(todoAction) => Todo.reducer(todoAction, state.todo)
   }
 ;
 
