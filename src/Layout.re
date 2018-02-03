@@ -31,11 +31,16 @@ let make = (~send: send, ~state: publishedState, children) => {
   render: _self => {
     <div className=(name)>
       (switch (state.username) {
-        | Some(username) => <b>(Util.text("logged in as " ++ username))</b>
-        | None => Util.text("")
+        | Some(username) =>
+          <div>
+            <b>(Util.text("logged in as " ++ username))</b>
+            <button onClick=((_evt) => send(Logout))>(Util.text("Logout"))</button>
+          </div>
+        | None =>
+          <div>
+            <button onClick=((_evt) => send(Login("bob")))>(Util.text("Login"))</button>
+          </div>
       })
-      <button onClick=((_evt) => send(Login("bob")))>(Util.text("Login"))</button>
-      <button onClick=((_evt) => send(Logout))>(Util.text("Logout"))</button>
       (ReasonReact.arrayToElement(children))
     </div>
   }
