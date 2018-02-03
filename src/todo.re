@@ -24,7 +24,7 @@ let addTodo = (state: state, send, _evt) => {
   ignore(todo##focus());
 };
 
-let setInputRef = (el: Js.nullable(Dom.element), state) => {
+let setInputRef = (el: Js.nullable(Dom.element), state: state) => {
   { ...state, inputRef: ref(Js.Nullable.to_opt(el)) }
 };
 
