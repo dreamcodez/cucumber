@@ -18,4 +18,9 @@ let common = (reactClass, props, ~commonProp1, ~commonProp2, children) =>
       "commonProp2": commonProp2
     }),
     children
-  );
+  )
+;
+
+let getInputValueFromEvent = (event) =>
+  ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value
+;
