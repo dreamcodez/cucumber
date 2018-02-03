@@ -1,39 +1,35 @@
 type publishedAction =
- | SetInput(string)
- | AddTodo(string)
+  | Login(string) /* username */
+  | Logout
 ;
 
 type publishedState = {
-  todos: list(string),
-  inputValue: string
+  username: option(string),
 };
 
 type send = publishedAction => unit;
 
-let publishedInitialState = { inputValue: "", todos: [] };
-
+let publishedInitialState = { username: None };
 
 let publishedReducer = (action: publishedAction, state: publishedState): publishedState =>
   switch action {
-    | SetInput(inputValue) => {
-      ...state,
-      inputValue
+    | Login(username) => {
+      username: Some(username)
     }
-    | AddTodo(todo) => {
-        todos: [ todo, ...state.todos ],
-        inputValue: ""
-      }
+    | Logout => {
+      username: None
+    }
   }
 ;
 
-let name = "Todo";
+let name = "Layout";
 
 let component = ReasonReact.statelessComponent(name);
 
 let make = (~send: send, ~state: publishedState, _children) => {
   ...component,
   render: _self => {
-    <div className=name>
+    <div className=(name)>
       <input 
         _type="text"
         value=(state.inputValue)

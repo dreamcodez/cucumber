@@ -27,7 +27,7 @@ let make = (_children) => {
     });
   },
   render: self => {
-    <div className="App">
+    <div className=name>
       <div className="App-header">
         <img src=logo className="App-logo" alt="logo" />
       </div>
