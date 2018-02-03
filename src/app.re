@@ -34,9 +34,15 @@ let make = (_children) => {
       </div>
       <Todo
         send=((todoAction: Todo.action) => self.send(TodoAction(todoAction)))
-        handle=((r, {ReasonReact.state}) => state := { ...state, todo: self.handle(r, state.todo)})
+        handle=(handler => {
+          self.handle((r, {ReasonReact.state}) => {
+            state.todo := handler(r, state.todo)
+          })
+        })
         state=self.state.todo
         />
     </div>
   }
+        /*
+        */
 };
