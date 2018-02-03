@@ -22,7 +22,9 @@ type self = ReasonReact.self (state,  ReasonReact.noRetainedProps,  action);
 let addTodo = (self: self, _evt) => {
   let el = raiseWhenNone(self.state.inputRef^, "input element missing");
   let todo = ReactDOMRe.domElementToObj(el);
-  self.send(AddTodo(todo##value));
+  let value = todo##value;
+  todo##value #= "";
+  self.send(AddTodo(value));
 };
 
 let setInputRef = (el: Js.nullable(Dom.element), {ReasonReact.state}) => {
