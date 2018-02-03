@@ -39,7 +39,7 @@ let reducer = (action: action, state: state): state =>
 
 let make = (~send, ~state: state, ~handle, _children) => {
   ...component,
-  render: self => {
+  render: _self => {
     <div className="App">
       <input _type="text" ref=(handle(setInputRef)) />
       <button onClick=(addTodo(state, send))>

@@ -34,7 +34,7 @@ let make = (_children) => {
       </div>
       <Todo
         send=((todoAction: Todo.action) => self.send(TodoAction(todoAction)))
-        handle=(r => { todo: self.handle(r)})
+        handle=((r, {ReasonReact.state}) => state := { ...state, todo: self.handle(r, state.todo)})
         state=self.state.todo
         />
     </div>
