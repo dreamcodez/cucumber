@@ -30,16 +30,16 @@ let name = "Todo";
 
 let component = ReasonReact.statelessComponent(name);
 
-let make = (~send: send, ~state: publishedState, _children) => {
+let make = (~sendLocal: send, ~state: publishedState, _children) => {
   ...component,
   render: _self => {
     <div className=name>
       <input 
         _type="text"
         value=(state.inputValue)
-        onChange=((evt) => send(SetInput(Util.getInputValueFromEvent(evt))))
+        onChange=((evt) => sendLocal(SetInput(Util.getInputValueFromEvent(evt))))
       />
-      <button onClick=((_evt) => send(AddTodo(state.inputValue)))>
+      <button onClick=((_evt) => sendLocal(AddTodo(state.inputValue)))>
           (ReasonReact.stringToElement("another one"))
       </button>
       <div className="App-intro">

@@ -56,7 +56,7 @@ let make = (_children) => {
         })
 
         <Todo
-          send=((todoAction) => send(TodoAction(todoAction)))
+          sendLocal=((todoAction) => send(TodoAction(todoAction)))
           state=state.todo
         />
       </Layout>
