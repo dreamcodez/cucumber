@@ -39,7 +39,10 @@ let reducer = (action: action, state: state): state =>
   }
 ;
 
-type noAction = | NoAction;
+type noAction =
+  | NoAction
+  | Foo
+;
 let make = (~send, ~state: state, _children) => {
   ...component,
   initialState: (): internalState => { inputRef: ref(None) },
