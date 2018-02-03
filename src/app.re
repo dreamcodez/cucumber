@@ -6,7 +6,7 @@ type action =
 ;
 
 type state = {
-  todos: array(string)
+  todos: list(string)
 };
 
 let component = ReasonReact.reducerComponent("App");
@@ -14,10 +14,11 @@ let component = ReasonReact.reducerComponent("App");
 let make = (_children) => {
   ...component,
   initialState: () => { todos: [] },
-  reducer: (action, state) =>
-    switch (action) {
-    | AddTodo todo => ReasonReact.Update({ todos: [ ...todos, todo ] })
-    },
+  reducer: (action, state) => {
+    switch action {
+    | AddTodo(todo) => ReasonReact.Update({ todos: [ ...state.todos, todo ] })
+    }
+  },
   render: self =>
     <div className="App">
       <div className="App-header">
@@ -25,8 +26,8 @@ let make = (_children) => {
       </div>
       <p className="App-intro">
         List.map(todo => {
-          <span>(todo)<span/>
-        }, todos)
+          <span>ReasonReact.stringToElement(todo)<span/>
+        }, self.state.todos)
       </p>
     </div>
 };
