@@ -1,12 +1,12 @@
 type action =
-  | LayoutAction(Layout.publishedAction)
+  | LoginAction(string) /* username */
+  | LogoutAction
   | TodoAction(Todo.publishedAction)
 ;
 
 type state = {
-  foo: int,
-  todo: Todo.publishedState,
-  layout: Layout.publishedState
+  username: option(string),
+  todo: Todo.publishedState
 };
 
 [%bs.raw {|require('./app.css')|}];
@@ -19,32 +19,45 @@ let component = ReasonReact.reducerComponent(name);
 let make = (_children) => {
   ...component,
   initialState: (): state => {
-    foo: 1,
-    todo: Todo.publishedInitialState,
-    layout: Layout.publishedInitialState
+    username: None,
+    todo: Todo.publishedInitialState
   },
   reducer: (action: action, state: state) => {
     ReasonReact.Update(switch action {
-      | LayoutAction(layoutAction) => {
-        { ...state, layout: Layout.publishedReducer(layoutAction, state.layout) }
+      | LoginAction(username) => {
+        ...state,
+        username: Some(username)
+      }
+      | LogoutAction => {
+        ...state,
+        username: None
       }
       | TodoAction(todoAction) => {
         { ...state, todo: Todo.publishedReducer(todoAction, state.todo) }
       }
     });
   },
-  render: self => {
+  render: ({ send, state }) => {
     <div className=name>
       <div className="App-header">
         <img src=logo className="App-logo" alt="logo" />
       </div>
-      <Layout
-          send=((layoutAction) => self.send(LayoutAction(layoutAction)))
-          state=self.state.layout
-      >
+      <Layout>
+        (switch (state.username) {
+          | Some(username) =>
+            <div>
+              <b>(Util.text("logged in as " ++ username))</b>
+              <button onClick=((_evt) => send(LogoutAction))>(Util.text("Logout"))</button>
+            </div>
+          | None =>
+            <div>
+              <button onClick=((_evt) => send(LoginAction("bob")))>(Util.text("Login"))</button>
+            </div>
+        })
+
         <Todo
-          send=((todoAction) => self.send(TodoAction(todoAction)))
-          state=self.state.todo
+          send=((todoAction) => send(TodoAction(todoAction)))
+          state=state.todo
         />
       </Layout>
     </div>
