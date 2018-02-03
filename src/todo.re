@@ -1,6 +1,6 @@
 
 type action =
- | SetInputRef(option(Dom.node))
+ | SetInputRef(option(Dom.element))
  | AddTodo(string)
 ;
 
@@ -9,7 +9,11 @@ type state = {
   inputRef: Type.domRef
 };
 
+type send = (action) => unit;
+
 let component = ReasonReact.statelessComponent("Todo");
+
+let initialState = () => { todos: [], inputRef: ref(None) };
 
 let addTodo = (state, send, _evt) => {
   let todo = Util.getElementObj(state.inputRef);
@@ -21,24 +25,27 @@ let addTodo = (state, send, _evt) => {
   ignore(todo##focus());
 };
 
-let setInputRef = (send, el: Js.nullable(Dom.element)) => {
+
+let setInputRef = (send: send, el: Js.nullable(Dom.element)) => {
   send(SetInputRef(Js.Nullable.to_opt(el)));
 };
 
-let reducer = (action: action, state: state) =>
+let reducer = (action: action, state: state): state =>
   switch action {
-    | SetInputRef(optionalDomNode) =>
-      ReasonReact.Update({
+    | SetInputRef(optionalDomNode) => {
         ...state,
-        inputRef: optionalDomNode
-      })
-    | AddTodo(todo) => ReasonReact.Update({ ...state, todos: [ todo, ...state.todos ] })
+        inputRef: ref(optionalDomNode)
+      }
+    | AddTodo(todo) => {
+        ...state,
+        todos: [ todo, ...state.todos ]
+      }
   }
 ;
 
 let make = (~send, ~state, _children) => {
   ...component,
-  render: self => {
+  render: _self => {
     <div className="App">
       <input _type="text" ref=(setInputRef(send)) />
       <button onClick=(addTodo(state, send))>

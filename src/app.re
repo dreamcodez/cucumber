@@ -19,14 +19,12 @@ let reducer = (action: action, state: state) =>
 
 let make = (_children) => {
   ...component,
-  initialState: () => { todos: [], inputRef: ref(None) },
-  reducer,
   render: self => {
     <div className="App">
       <div className="App-header">
         <img src=logo className="App-logo" alt="logo" />
       </div>
-      <Todo/>
+      <Todo send=(self.send) state=(self.state.todo) />
     </div>
   }
 };
