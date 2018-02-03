@@ -26,18 +26,16 @@ let name = "Layout";
 
 let component = ReasonReact.statelessComponent(name);
 
-let text = ReasonReact.stringToElement;
-
 let make = (~send: send, ~state: publishedState, children) => {
   ...component,
   render: _self => {
     <div className=(name)>
       (switch (state.username) {
-        | Some(username) => <b>(text("logged in as " ++ username))</b>
-        | None => <b/>
+        | Some(username) => <b>(Util.text("logged in as " ++ username))</b>
+        | None => Util.text("")
       })
-      <button onClick=((_evt) => send(Login("bob")))>(text("Login"))</button>
-      <button onClick=((_evt) => send(Logout))>(text("Logout"))</button>
+      <button onClick=((_evt) => send(Login("bob")))>(Util.text("Login"))</button>
+      <button onClick=((_evt) => send(Logout))>(Util.text("Logout"))</button>
       (ReasonReact.arrayToElement(children))
     </div>
   }
