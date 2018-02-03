@@ -8,6 +8,8 @@ type publishedState = {
   inputValue: string
 };
 
+type send = publishedAction => unit;
+
 let publishedInitialState = { inputValue: "", todos: [] };
 
 
@@ -28,7 +30,7 @@ let name = "Todo";
 
 let component = ReasonReact.statelessComponent(name);
 
-let make = (~send, ~state: publishedState, _children) => {
+let make = (~send: send, ~state: publishedState, _children) => {
   ...component,
   render: _self => {
     <div className="App">
