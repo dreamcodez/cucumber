@@ -38,7 +38,7 @@ let make = (~send: send, ~state: publishedState, children) => {
       })
       <button onClick=((_evt) => send(Login("bob")))>(text("Login"))</button>
       <button onClick=((_evt) => send(Logout))>(text("Logout"))</button>
-      (children)
+      (ReasonReact.arrayToElement(children))
     </div>
   }
 };
