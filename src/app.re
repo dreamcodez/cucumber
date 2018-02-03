@@ -21,7 +21,10 @@ let addTodo = (self: self, _evt) => {
 let setInputRef = (el: Js.nullable(Dom.element), {ReasonReact.state}) => {
   state.inputRef := Js.Nullable.to_opt(el);
 };
-let component = ReasonReact.reducerComponent("App");
+
+let name = "App";
+
+let component = ReasonReact.reducerComponent(name);
 
 let make = (_children) => {
   ...component,
