@@ -1,6 +1,4 @@
-type action =
-  | TodoAction(Todo.publishedAction)
-;
+type action = AppState.action;
 type state = {
   foo: int,
   todo: Todo.publishedState
