@@ -19,12 +19,16 @@ let make = (_children) => {
     foo: 1,
     todo: Todo.initialState
   },
-  reducer: (action: action, state: state) =>
+  reducer: (action: action, state: state) => {
     switch action {
-      | TodoAction(todoAction) => ReasonReact.Update({
-        ...state,
-        todo: Todo.reducer(todoAction, state.todo)
-      })
+      | TodoAction(todoAction) => {
+        let newState = { ...state, todo: Todo.reducer(todoAction, state.todo) };
+        switch todoAction {
+          | SetInputRef(_el) => ReasonReact.SilentUpdate(newState)
+          | _otherwise => ReasonReact.Update(newState)
+        }
+      }
+    };
   },
   render: self => {
     <div className="App">

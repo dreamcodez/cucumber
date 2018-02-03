@@ -27,6 +27,7 @@ let addTodo = (state, send, _evt) => {
 
 
 let setInputRef = (send, el: Js.nullable(Dom.element)) => {
+  print_string("FUXXX");
   send(SetInputRef(Js.Nullable.to_opt(el)));
 };
 
@@ -45,21 +46,19 @@ let reducer = (action: action, state: state): state =>
 
 let make = (~send, ~state, _children) => {
   ...component,
-  initialState: () => (),
-  reducer: _action => ReasonReact.NoUpdate,
   render: _self => {
     <div className="App">
       <input _type="text" ref=(setInputRef(send)) />
       <button onClick=(addTodo(state, send))>
           (ReasonReact.stringToElement("another one"))
       </button>
-      <p className="App-intro">
+      <div className="App-intro">
         <ul>
           (ReasonReact.arrayToElement(Array.of_list(List.rev(List.map(todo => {
             <li>(ReasonReact.stringToElement(todo))</li>
           }, state.todos)))))
         </ul>
-      </p>
+      </div>
     </div>
   }
 };
