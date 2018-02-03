@@ -1,5 +1,4 @@
-[%bs.raw {|require('./app.css')|}];
-[@bs.module] external logo : string = "./cucumber.png";
+let name = "App";
 
 type state = {
   todos: list(string),
@@ -17,13 +16,9 @@ let addTodo = (self: self, _evt) => {
   };
   ignore(todo##focus());
 };
-
 let setInputRef = (el: Js.nullable(Dom.element), {ReasonReact.state}) => {
   state.inputRef := Js.Nullable.to_opt(el);
 };
-
-let name = "App";
-
 let component = ReasonReact.reducerComponent(name);
 
 let reducer = (action: Action.t, state: state) =>
@@ -38,10 +33,17 @@ let make = (_children) => {
   reducer,
   render: self => {
     <div className="App">
-      <div className="App-header">
-        <img src=logo className="App-logo" alt="logo" />
-      </div>
-      <Todo/>
+      <input _type="text" ref=(self.handle(setInputRef)) />
+      <button onClick=(addTodo(self))>
+          (ReasonReact.stringToElement("another one"))
+      </button>
+      <p className="App-intro">
+        <ul>
+          (ReasonReact.arrayToElement(Array.of_list(List.rev(List.map(todo => {
+            <li>(ReasonReact.stringToElement(todo))</li>
+          }, self.state.todos)))))
+        </ul>
+      </p>
     </div>
   }
 };
