@@ -1,23 +1,25 @@
-
 type action =
- | SetInputRef(option(Dom.element))
  | AddTodo(string)
 ;
 
 type state = {
-  todos: list(string),
-  inputRef: Type.domRef
+  todos: list(string)
+};
+
+type internalState = {
+  inputRef: ref(option(Dom.element))
 };
 
 let name = "Todo";
 
-let component = ReasonReact.statelessComponent(name);
+let component = ReasonReact.reducerComponent(name);
 
-let initialState = { todos: [], inputRef: ref(None) };
+let initialState = { todos: [] };
 
-let addTodo = (state, send, _evt) => {
-  let todo = Util.getElementObj(state.inputRef);
+let addTodo = (internalState: internalState, send, _evt) => {
+  let todo = Util.getElementObj(internalState.inputRef);
   let value = todo##value;
+
   if (value != "") {
     todo##value #= "";
     send(AddTodo(value));
@@ -25,31 +27,27 @@ let addTodo = (state, send, _evt) => {
   ignore(todo##focus());
 };
 
-
-let setInputRef = (send, el: Js.nullable(Dom.element)) => {
-  print_string("FUXXX");
-  send(SetInputRef(Js.Nullable.to_opt(el)));
+let setInputRef = (el: Js.nullable(Dom.element), {ReasonReact.state}) => {
+  state.inputRef := Js.Nullable.to_opt(el);
 };
 
 let reducer = (action: action, state: state): state =>
   switch action {
-    | SetInputRef(optionalDomNode) => {
-        ...state,
-        inputRef: ref(optionalDomNode)
-      }
     | AddTodo(todo) => {
-        ...state,
         todos: [ todo, ...state.todos ]
       }
   }
 ;
 
-let make = (~send, ~state, _children) => {
+type noAction = | NoAction;
+let make = (~send, ~state: state, _children) => {
   ...component,
-  render: _self => {
+  initialState: (): internalState => { inputRef: ref(None) },
+  reducer: (_action: noAction, _state: internalState) => ReasonReact.NoUpdate,
+  render: self => {
     <div className="App">
-      <input _type="text" ref=(setInputRef(send)) />
-      <button onClick=(addTodo(state, send))>
+      <input _type="text" ref=(self.handle(setInputRef)) />
+      <button onClick=(addTodo(self.state, send))>
           (ReasonReact.stringToElement("another one"))
       </button>
       <div className="App-intro">
