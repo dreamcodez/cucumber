@@ -12,16 +12,22 @@ type action =
   | AddTodo(string)
 ;
 
+type domRef = ref(option(Dom.element));
+
+let getElementObj = (domRef: domRef) => {
+  let el = raiseWhenNone(domRef^, "element missing from dom");
+  ReactDOMRe.domElementToObj(el);
+};
+
 type state = {
   todos: list(string),
-  inputRef: ref(option(Dom.element))
+  inputRef: domRef
 };
 
 type self = ReasonReact.self (state,  ReasonReact.noRetainedProps,  action);
 
 let addTodo = (self: self, _evt) => {
-  let el = raiseWhenNone(self.state.inputRef^, "input element missing");
-  let todo = ReactDOMRe.domElementToObj(el);
+  let todo = getElementObj(self.state.inputRef);
   let value = todo##value;
   if (value != "") {
     todo##value #= "";
