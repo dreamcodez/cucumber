@@ -1,4 +1,7 @@
-type action = AppState.action;
+type action =
+  | TodoAction(Todo.publishedAction)
+;
+
 type state = {
   foo: int,
   todo: Todo.publishedState
@@ -13,7 +16,7 @@ let component = ReasonReact.reducerComponent(name);
 
 let make = (_children) => {
   ...component,
-  initialState: () => {
+  initialState: (): state => {
     foo: 1,
     todo: Todo.publishedInitialState
   },
