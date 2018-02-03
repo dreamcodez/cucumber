@@ -15,7 +15,7 @@ let component = ReasonReact.reducerComponent(name);
 
 let make = (_children) => {
   ...component,
-  initialState: _self => {
+  initialState: () => {
     foo: 1,
     todo: Todo.publishedInitialState
   },
