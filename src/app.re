@@ -2,6 +2,7 @@ type action =
   | TodoAction(Todo.action)
 ;
 type state = {
+  foo: int,
   todo: Todo.state
 };
 
@@ -11,20 +12,30 @@ let name = "App";
 [@bs.module] external logo : string = "./cucumber.png";
 
 let component = ReasonReact.reducerComponent(name);
+
+
 let reducer = (action: action, state: state) =>
   switch action {
-    | TodoAction(todoAction) => Todo.reducer(todoAction, state.todo)
+    | TodoAction(todoAction) => ReasonReact.Update({
+      ...state,
+      todo: Todo.reducer(todoAction, state.todo)
+    })
   }
 ;
 
 let make = (_children) => {
   ...component,
+  initialState: _self => {
+    foo: 1,
+    todo: Todo.initialState
+  },
+  reducer,
   render: self => {
     <div className="App">
       <div className="App-header">
         <img src=logo className="App-logo" alt="logo" />
       </div>
-      <Todo send=(self.send) state=(self.state.todo) />
+      <Todo send=((todoAction: Todo.action) => self.send(TodoAction(todoAction))) state=self.state.todo />
     </div>
   }
 };

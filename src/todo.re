@@ -9,11 +9,11 @@ type state = {
   inputRef: Type.domRef
 };
 
-type send = (action) => unit;
+let name = "Todo";
 
-let component = ReasonReact.statelessComponent("Todo");
+let component = ReasonReact.reducerComponent(name);
 
-let initialState = () => { todos: [], inputRef: ref(None) };
+let initialState = { todos: [], inputRef: ref(None) };
 
 let addTodo = (state, send, _evt) => {
   let todo = Util.getElementObj(state.inputRef);
@@ -26,7 +26,7 @@ let addTodo = (state, send, _evt) => {
 };
 
 
-let setInputRef = (send: send, el: Js.nullable(Dom.element)) => {
+let setInputRef = (send, el: Js.nullable(Dom.element)) => {
   send(SetInputRef(Js.Nullable.to_opt(el)));
 };
 
@@ -45,6 +45,8 @@ let reducer = (action: action, state: state): state =>
 
 let make = (~send, ~state, _children) => {
   ...component,
+  initialState: () => (),
+  reducer: _action => ReasonReact.NoUpdate,
   render: _self => {
     <div className="App">
       <input _type="text" ref=(setInputRef(send)) />
