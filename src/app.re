@@ -23,8 +23,11 @@ let addTodo = (self: self, _evt) => {
   let el = raiseWhenNone(self.state.inputRef^, "input element missing");
   let todo = ReactDOMRe.domElementToObj(el);
   let value = todo##value;
-  todo##value #= "";
-  self.send(AddTodo(value));
+  if (value != "") {
+    todo##value #= "";
+    self.send(AddTodo(value));
+  };
+  ignore(todo##focus());
 };
 
 let setInputRef = (el: Js.nullable(Dom.element), {ReasonReact.state}) => {
