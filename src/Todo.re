@@ -18,7 +18,6 @@ type send = publishedAction => unit;
 
 let publishedInitialState = { inputValue: "", todos: [], nextId: 1 };
 
-
 let publishedReducer = (action: publishedAction, state: publishedState): publishedState =>
   switch action {
     | SetInput(inputValue) => {
