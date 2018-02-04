@@ -3,14 +3,20 @@ type publishedAction =
  | AddTodo(string)
 ;
 
+type todo = {
+  id: int,
+  description: string
+};
+
 type publishedState = {
-  todos: list(string),
+  nextId: int,
+  todos: list(todo),
   inputValue: string
 };
 
 type send = publishedAction => unit;
 
-let publishedInitialState = { inputValue: "", todos: [] };
+let publishedInitialState = { inputValue: "", todos: [], nextId: 1 };
 
 
 let publishedReducer = (action: publishedAction, state: publishedState): publishedState =>
@@ -19,10 +25,17 @@ let publishedReducer = (action: publishedAction, state: publishedState): publish
       ...state,
       inputValue
     }
-    | AddTodo(todo) => {
+    | AddTodo(todoStr) => {
+      let todo = {
+        id: state.nextId,
+        description: todoStr
+      };
+      {
+        nextId: state.nextId + 1,
         todos: [ todo, ...state.todos ],
         inputValue: ""
       }
+    }
   }
 ;
 
@@ -45,7 +58,7 @@ let make = (~sendLocal: send, ~state: publishedState, _children) => {
       <div className="App-intro">
         <ul>
           (ReasonReact.arrayToElement(Array.of_list(List.rev(List.map(todo => {
-            <li>(ReasonReact.stringToElement(todo))</li>
+            <li key=(string_of_int(todo.id))>(ReasonReact.stringToElement(todo.description))</li>
           }, state.todos)))))
         </ul>
       </div>
