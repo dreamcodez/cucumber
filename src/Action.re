@@ -1,4 +1,4 @@
-type action =
+type t =
   | SetUrl(ReasonReact.Router.url)
   | LoginAction(string)
   | LogoutAction
@@ -11,7 +11,7 @@ type state = {
   todo: Todo.publishedState
 };
 
-let reducer = (action: action, state) => {
+let reducer = (action: t, state) => {
   switch action {
     | SetUrl(url) => {
       ...state,
