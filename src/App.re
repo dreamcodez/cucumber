@@ -41,13 +41,18 @@ let make = (_children) => {
               <button onClick=((_evt) => send(LoginAction("bob")))>(Util.text("Login"))</button>
             </div>
         })
+        (switch (state.url.path) {
+          | [ "todos"] =>
+            <Todo
+              key="todo"
+              sendLocal=((todoAction) => send(TodoAction(todoAction)))
+              state=state.todo
+            />
+          | _ =>
+            <div>(ReasonReact.stringToElement("404"))</div>
+        })
 
-        <Todo
-          key="todo"
-          sendLocal=((todoAction) => send(TodoAction(todoAction)))
-          state=state.todo
-        />
-      </Layout>
+              </Layout>
     </div>
   }
 };
