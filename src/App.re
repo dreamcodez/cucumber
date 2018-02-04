@@ -17,7 +17,7 @@ let make = (_children) => {
     ReasonReact.Update(reducer(action, state));
   },
   didMount: ({ send }) => {
-    ReasonReact.SideEffects(self => {
+    ReasonReact.SideEffects(_self => {
       ignore(ReasonReact.Router.watchUrl(url => {
         send(SetUrl(url))
       }));
