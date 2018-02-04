@@ -16,13 +16,10 @@ let make = (_children) => {
   reducer: (action: action, state: state) => {
     ReasonReact.Update(reducer(action, state));
   },
-  didMount: (_self) => {
+  didMount: ({ send }) => {
     ReasonReact.SideEffects(self => {
       ignore(ReasonReact.Router.watchUrl(url => {
-        switch (url.path) {
-          | ["todos"] => self.send(LoginAction("jimbob"))
-          | path => Js.log(path)
-        }
+        send(SetUrl(url))
       }));
     });
   },

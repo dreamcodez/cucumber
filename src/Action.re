@@ -1,4 +1,5 @@
 type action =
+  | SetUrl(ReasonReact.Router.url)
   | LoginAction(string)
   | LogoutAction
   | TodoAction(Todo.publishedAction)
@@ -12,6 +13,10 @@ type state = {
 
 let reducer = (action: action, state) => {
   switch action {
+    | SetUrl(url) => {
+      ...state,
+      url
+    }
     | LoginAction(username) => {
       ...state,
       username: Some(username)
