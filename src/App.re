@@ -1,9 +1,4 @@
-type action =
-  | LoginAction(string)
-  | LogoutAction
-  | TodoAction(Todo.publishedAction)
-;
-
+type action = Action.t;
 type state = {
   url: ReasonReact.Router.url,
   username: option(string),
@@ -43,14 +38,14 @@ let make = (_children) => {
     ReasonReact.SideEffects(self => {
       ignore(ReasonReact.Router.watchUrl(url => {
         switch (url.path) {
-          | ["todos"] => self.send(LoginAction("jimbob"))
+          | ["todos"] => self.send(Action.LoginAction("jimbob"))
           | path => Js.log(path)
         }
       }));
     });
   },
   render: (self) => {
-    Js.log([%obj self.state ]);
+    Js.log(self.state);
     <div className=name>
       <div className="App-header">
         <img src=logo className="App-logo" alt="logo" />
@@ -60,11 +55,11 @@ let make = (_children) => {
           | Some(username) =>
             <div key="login">
               <b>(Util.text("logged in as " ++ username))</b>
-              <button onClick=((_evt) => self.send(LogoutAction))>(Util.text("Logout"))</button>
+              <button onClick=((_evt) => self.send(Action.LogoutAction))>(Util.text("Logout"))</button>
             </div>
           | None =>
             <div key="login">
-              <button onClick=((_evt) => self.send(LoginAction("bob")))>(Util.text("Login"))</button>
+              <button onClick=((_evt) => self.send(Action.LoginAction("bob")))>(Util.text("Login"))</button>
             </div>
         })
 
