@@ -1,5 +1,5 @@
 type action =
-  | LoginAction(string) /* username */
+  | LoginAction(string)
   | LogoutAction
   | TodoAction(Todo.publishedAction)
 ;
@@ -37,27 +37,35 @@ let make = (_children) => {
       }
     });
   },
-  render: ({ send, state }) => {
+  didMount: (self) => {
+    let watcherID = ReasonReact.Router.watchUrl(url => {
+      switch (url.path) {
+      | ["todos"] => self.send(LoginAction("jimbob"))
+      }
+    });
+  },
+/*      | _ => showNotFoundPage()*/
+  render: (self) => {
     <div className=name>
       <div className="App-header">
         <img src=logo className="App-logo" alt="logo" />
       </div>
       <Layout>
-        (switch (state.username) {
+        (switch (self.state.username) {
           | Some(username) =>
             <div>
               <b>(Util.text("logged in as " ++ username))</b>
-              <button onClick=((_evt) => send(LogoutAction))>(Util.text("Logout"))</button>
+              <button onClick=((_evt) => self.send(LogoutAction))>(Util.text("Logout"))</button>
             </div>
           | None =>
             <div>
-              <button onClick=((_evt) => send(LoginAction("bob")))>(Util.text("Login"))</button>
+              <button onClick=((_evt) => self.send(LoginAction("bob")))>(Util.text("Login"))</button>
             </div>
         })
 
         <Todo
-          sendLocal=((todoAction) => send(TodoAction(todoAction)))
-          state=state.todo
+          sendLocal=((todoAction) => self.send(TodoAction(todoAction)))
+          state=self.state.todo
         />
       </Layout>
     </div>
