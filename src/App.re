@@ -1,6 +1,6 @@
 open Action;
 
-type action = Action.t;
+type action = t;
 
 [%bs.raw {|require('./app.css')|}];
 [@bs.module] external logo : string = "./cucumber.png";
@@ -16,12 +16,12 @@ let make = (_children) => {
     todo: Todo.publishedInitialState
   },
   reducer: (action: action, state: state) => {
-    ReasonReact.Update(Action.reducer(action, state));
+    ReasonReact.Update(reducer(action, state));
   },
   didMount: ({ send }) => {
     ReasonReact.SideEffects(_self => {
       ignore(ReasonReact.Router.watchUrl(url => {
-        send(Action.SetUrl(url))
+        send(SetUrl(url))
       }));
     });
   },
@@ -36,11 +36,11 @@ let make = (_children) => {
           | Some(username) =>
             <div key="login">
               <b>(Util.text("logged in as " ++ username))</b>
-              <button onClick=((_evt) => send(Action.LogoutAction))>(Util.text("Logout"))</button>
+              <button onClick=((_evt) => send(LogoutAction))>(Util.text("Logout"))</button>
             </div>
           | None =>
             <div key="login">
-              <button onClick=((_evt) => send(Action.LoginAction("bob")))>(Util.text("Login"))</button>
+              <button onClick=((_evt) => send(LoginAction("bob")))>(Util.text("Login"))</button>
             </div>
         })
         (switch (state.url.path) {
